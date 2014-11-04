@@ -1,7 +1,7 @@
 Auto
 ====
 
-Proyecto ***Arduino***
+**Proyecto *Arduino***
 
 
 Automatización de riego controlando humedad y temperatura.
