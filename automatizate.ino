@@ -6,13 +6,14 @@
  *	 200  ---->  80%
  *	 300  ---->  70%
  *	 400  ---->  60%
- *   500  ---->  50%
+ *	 500  ---->  50%
  *
  *******************************************************************/
 
 int sensorPin = A0;    // select the input pin for the potentiometer
-int sensorValue = 0;  // variable to store the value coming from the sensor
+int sensorValue = 0;   // variable to store the value coming from the sensor
 int pinRele = 13;
+int valorReferencia = 300;
 
 void setup() {
   pinMode(pinRele, OUTPUT);
@@ -22,24 +23,25 @@ void setup() {
 void loop() {
   // read the value from the sensor:
   evaluarHumedad();
-  controlarValvula();
+  //controlarValvula();
 
 }
 
 void evaluarHumedad(){
-  if (leerSensor() < 300 && valvulaCerrada()){
+  if (leerSensor() < valorReferencia && valvulaCerrada()){
     abrirValvula();
-  }else if (leerSensor() > 300 && valvulaAbierta()){
+  }else if (leerSensor() > valorReferencia && valvulaAbierta()){
     cerrarValvula();
   }
 }
 
-void controlarValvula(){  
-  while(sensorValue < 300){
-    evaluarHumedad();
-  }
-  evaluarHumedad();
-}
+// void controlarValvula(){  
+//   if(valvulaCerrada()){
+//   	abrirValvula();
+//   }else if (valvulaAbierta()){
+//   	abrirValvula();
+//   }
+// }
 
 int leerSensor(){
   sensorValue = (1023 - analogRead(sensorPin));
