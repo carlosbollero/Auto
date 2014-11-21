@@ -1,3 +1,15 @@
+/********************************************************************
+ *
+ *	El sensor mide la resistencia devuelve valores entre 0 y 1023,
+ *	siendo 0 la menor resistencia y 1023 la mayor.
+ *	sensor  | humedad aprox.
+ *	 200  ---->  80%
+ *	 300  ---->  70%
+ *	 400  ---->  60%
+ *   500  ---->  50%
+ *
+ *******************************************************************/
+
 int sensorPin = A0;    // select the input pin for the potentiometer
 int sensorValue = 0;  // variable to store the value coming from the sensor
 int pinRele = 13;
@@ -9,9 +21,24 @@ void setup() {
 
 void loop() {
   // read the value from the sensor:
-  leerSensor();
+  evaluarHumedad();
   controlarValvula();
 
+}
+
+void evaluarHumedad(){
+  if (leerSensor() < 300 && valvulaCerrada()){
+    abrirValvula();
+  }else if (leerSensor() > 300 && valvulaAbierta()){
+    cerrarValvula();
+  }
+}
+
+void controlarValvula(){  
+  while(sensorValue < 300){
+    evaluarHumedad();
+  }
+  evaluarHumedad();
 }
 
 int leerSensor(){
@@ -21,25 +48,9 @@ int leerSensor(){
   return sensorValue;
 }
 
-void imprimirValor(){
+void imprimir(int sensorValue){
   Serial.print("humedad = " );
   Serial.println(sensorValue);
-}
-
-void evaluarHumedad(){
-  if (sensorValue < 300 && valvulaCerrada()){
-    abrirValvula();
-  }else if (sensorValue > 300 && valvulaAbierta()){
-    cerrarValvula();
-  }
-}
-
-
-void controlarValvula(){  
-  while(sensorValue < 300){
-    evaluarHumedad();
-  }
-  evaluarHumedad();
 }
 
 void abrirValvula(){
