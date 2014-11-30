@@ -11,7 +11,7 @@
  *******************************************************************/
 
 int sensorPin = A0;    // select the input pin for the potentiometer
-int sensorValue = 0;   // variable to store the value coming from the sensor
+byte sensorValue = 0;   // variable to store the value coming from the sensor
 int pinRele = 13;
 int valorReferencia = 300;
 
@@ -28,29 +28,22 @@ void loop() {
 }
 
 void evaluarHumedad(){
-  if (leerSensor() < valorReferencia && valvulaCerrada()){
+  sensorValue = leerSensor();
+  if (sensorValue < valorReferencia && valvulaCerrada()){
     abrirValvula();
-  }else if (leerSensor() > valorReferencia && valvulaAbierta()){
+  }else if (sensorValue > valorReferencia && valvulaAbierta()){
     cerrarValvula();
   }
+  delay(1000);
 }
-
-// void controlarValvula(){  
-//   if(valvulaCerrada()){
-//   	abrirValvula();
-//   }else if (valvulaAbierta()){
-//   	abrirValvula();
-//   }
-// }
 
 int leerSensor(){
   sensorValue = (1023 - analogRead(sensorPin));
-  imprimirValor();
-  delay(1000);
+  imprimir();
   return sensorValue;
 }
 
-void imprimir(int sensorValue){
+void imprimir(){
   Serial.print("humedad = " );
   Serial.println(sensorValue);
 }
@@ -72,3 +65,11 @@ boolean valvulaAbierta(){
 boolean valvulaCerrada(){
   return (digitalRead(pinRele) == LOW);
 }
+
+// void controlarValvula(){  
+//   if(valvulaCerrada()){
+//   	abrirValvula();
+//   }else if (valvulaAbierta()){
+//   	abrirValvula();
+//   }
+// }
